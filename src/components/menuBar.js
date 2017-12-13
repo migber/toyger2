@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
-import {Navbar, NavItem,
-        Nav, MenuItem,
-        NavDropdown,
-        Header,
-        Brand} from "react-bootstrap/lib/NavbarHeader"
+import {
+  Navbar, 
+  NavItem,
+  Nav, 
+  MenuItem,
+  NavDropdown,
+} from "react-bootstrap"
 
 class MenuBar extends Component {
   render() {
     return (
         <Navbar>
-        <Header>
-          <Brand>
+        <Navbar.Header>
+          <Navbar.Brand>
             <a href="#">React-Bootstrap</a>
-          </Brand>
-        </Header>
+          </Navbar.Brand>
+        </Navbar.Header>
         <Nav>
           <NavItem eventKey={1} href="#">Link</NavItem>
           <NavItem eventKey={2} href="#">Link</NavItem>

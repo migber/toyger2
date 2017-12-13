@@ -18,7 +18,7 @@ class App extends Component {
           <img src={require('./toyger.png')} className="picture"/>
           <h1 className="App-title">Welcome to Toyger</h1>
         </header>
-        <MenuBar component={MenuBar}/>
+        <MenuBar/>
         {/* <Router>
     <div>
       <ul>
