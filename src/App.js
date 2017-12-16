@@ -16,8 +16,6 @@ const handleAuthentication = (nextState, replace) => {
   }
 }
 
-//import { push as Menu } from 'react-burger-menu'
-
 class App extends Component {
   constructor(props){
     super(props)
@@ -27,6 +25,16 @@ class App extends Component {
     }
 
     this.onAboutClick = this.onAboutClick.bind(this)
+    this.login = this.login.bind(this)
+
+  }
+
+  logout() {
+    auth.logout()
+  }
+
+  login() {
+    auth.login()
   }
 
   onAboutClick() {
@@ -55,6 +63,7 @@ class App extends Component {
           clickCount={clickCount}
           eventId={eventId && eventId}
           auth={auth}
+          login={this.login}
 
         />
         {/* <Router>

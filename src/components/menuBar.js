@@ -29,12 +29,7 @@ import Callback from "../Callback/callback"
 
 
 class MenuBar extends Component {
-  logout() {
-    this.props.auth.logout();
-  }
-  login() {
-    this.props.auth.logout();
-  }
+  
   render() {
     const {eventId} = this.props
     const { isAuthenticated } = this.props.auth
@@ -73,11 +68,11 @@ class MenuBar extends Component {
 
         {
           !isAuthenticated() && (
-          <NavItem eventKey={1} href="/login" onClick={this.login.bind()} >Sign in</NavItem>
+          <NavItem eventKey={1} onClick={this.props.login} >Sign in</NavItem>
         )}
         {
           isAuthenticated() && (
-          <NavItem eventKey={1} href="/logout">Sign out</NavItem>
+          <NavItem eventKey={1} onClick={this.props.login} >Sign out</NavItem>
         )}
         </Nav>
       </Navbar.Collapse>
