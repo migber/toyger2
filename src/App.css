@@ -16,6 +16,8 @@
 
 .App-title {
   font-size: 1.5em;
+  margin-right: 15%;
+  display:inline-block;
 }
 
 .App-intro {
@@ -27,9 +29,8 @@
 }
 
 .picture{
-  height: 300px;
-  width: 200px;
-  margin-right: 150px;
+  max-width: 100px;
+  max-height: 150px;
 }
 
 @keyframes App-logo-spin {

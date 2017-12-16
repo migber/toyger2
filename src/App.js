@@ -11,14 +11,41 @@ import MenuBar             from './components/menuBar'
 //import { push as Menu } from 'react-burger-menu'
 
 class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      clickCount: 0,
+      eventId: null,
+    }
+
+    this.onAboutClick = this.onAboutClick.bind(this)
+  }
+
+  onAboutClick() {
+    console.log('click!')
+    this.setState({
+      clickCount: this.state.clickCount+1,
+      eventId: 42,
+    })
+  }
+
   render() {
+    const {clickCount, eventId} = this.state
     return (
       <div className="App">
         <header className="App-header">
-          <img src={require('./toyger.png')} className="picture"/>
+         <div>
+          <img src={require('./toyger.png')} className="picture" alt="logo"/>
           <h1 className="App-title">Welcome to Toyger</h1>
+          </div>
         </header>
-        <MenuBar/>
+        <MenuBar 
+          fixesTop={true} 
+          responsive={true} 
+          onAboutClick={this.onAboutClick}
+          clickCount={clickCount}
+          eventId={eventId && eventId}
+        />
         {/* <Router>
     <div>
       <ul>
