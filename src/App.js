@@ -7,6 +7,14 @@ import {
   Link
 } from 'react-router-dom'
 import MenuBar             from './components/menuBar'
+import Auth from "./Auth/auth"
+
+const auth = new Auth();
+const handleAuthentication = (nextState, replace) => {
+  if (/access_token|id_token|error/.test(nextState.location.hash)) {
+    auth.handleAuthentication();
+  }
+}
 
 //import { push as Menu } from 'react-burger-menu'
 
@@ -31,6 +39,7 @@ class App extends Component {
 
   render() {
     const {clickCount, eventId} = this.state
+
     return (
       <div className="App">
         <header className="App-header">
@@ -45,6 +54,8 @@ class App extends Component {
           onAboutClick={this.onAboutClick}
           clickCount={clickCount}
           eventId={eventId && eventId}
+          auth={auth}
+
         />
         {/* <Router>
     <div>

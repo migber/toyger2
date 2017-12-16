@@ -25,18 +25,16 @@ import Teams from "./teams"
 import Results from "./results"
 import Sprints from "./sprints"
 import Auth from "../Auth/auth"
+import Callback from "../Callback/callback"
+
 
 class MenuBar extends Component {
-  // currentLocation = this.props.location.pathname
-
-  login() {
-    this.props.auth.login();
-  }
-
   logout() {
     this.props.auth.logout();
   }
-
+  login() {
+    this.props.auth.logout();
+  }
   render() {
     const {eventId} = this.props
     const { isAuthenticated } = this.props.auth
@@ -75,7 +73,7 @@ class MenuBar extends Component {
 
         {
           !isAuthenticated() && (
-          <NavItem eventKey={1} href="/login" onClick={this.login.bind(this)} >Sign in</NavItem>
+          <NavItem eventKey={1} href="/login" onClick={this.login.bind()} >Sign in</NavItem>
         )}
         {
           isAuthenticated() && (
@@ -103,6 +101,10 @@ class MenuBar extends Component {
     <Route path="/contacts" component={Contacts}/>
     <Route path="/login" compoenent={Auth}/>
     <Route path="/logout" component={Auth}/>
+    <Route path="/callback" render={(props) => {
+            this.props.handleAuthentication
+            return <Callback {...props} /> 
+          }}/>
     </div>
     </Router>
     </BrowserRouter>
