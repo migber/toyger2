@@ -8,6 +8,8 @@ import {
 } from 'react-router-dom'
 import MenuBar             from './components/menuBar'
 import Auth from "./Auth/auth"
+import Callback from "./Callback/callback"
+
 
 const auth = new Auth();
 const handleAuthentication = (nextState, replace) => {
@@ -65,8 +67,14 @@ class App extends Component {
           eventId={eventId && eventId}
           auth={auth}
           login={this.login}
-
+          handleAuthentication={auth.handleAuthentication}
         />
+        <Router>
+          <Route path="/callback" render={(props) => {
+            auth.handleAuthentication()
+            return <Callback {...props} />
+          }} />
+        </Router>
         {/* <Router>
     <div>
       <ul>

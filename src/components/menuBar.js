@@ -96,10 +96,10 @@ class MenuBar extends Component {
     <Route path="/contacts" component={Contacts}/>
     <Route path="/" compoenent={Auth}/>
     <Route path="/logout" component={Auth}/>
-    <Route path="/callback" render={(props) => {
+    {/* <Route path="/callback" render={(props) => {
             this.props.handleAuthentication
             return <Callback {...props} /> 
-          }}/>
+          }}/> */}
     </div>
     </Router>
     </BrowserRouter>
