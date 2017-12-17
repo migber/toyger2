@@ -71,7 +71,7 @@ class App extends Component {
         />
         <Router>
           <Route path="/callback" render={(props) => {
-            auth.handleAuthentication()
+            auth.handleAuthentication(props)
             return <Callback {...props} />
           }} />
         </Router>
