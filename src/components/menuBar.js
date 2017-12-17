@@ -39,7 +39,7 @@ class MenuBar extends Component {
       <Navbar collapse navbar-collapse>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="#">Toyger</a>
+          <a href="/home">Toyger</a>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
@@ -81,7 +81,7 @@ class MenuBar extends Component {
     
     <Router>
     <div>
-    <Route exact path="/home" component={Home}/>
+    <Route exact path="/home" component={Home} auth={Auth}/>
     <Route path="/toyger/teams" component={Teams}/>
     <Route path="/toyger/races" component={Races}/>
     <Route path="/toyger/cyclists" component={Cyclists}/>
@@ -94,7 +94,7 @@ class MenuBar extends Component {
     <Route path="/toyger/events/:eventId/results" component={Results}/>
     <Route path="/about" component={About}/>
     <Route path="/contacts" component={Contacts}/>
-    <Route path="/login" compoenent={Auth}/>
+    <Route path="/" compoenent={Auth}/>
     <Route path="/logout" component={Auth}/>
     <Route path="/callback" render={(props) => {
             this.props.handleAuthentication

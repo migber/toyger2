@@ -11,6 +11,7 @@ import Auth from "./Auth/auth"
 
 const auth = new Auth();
 const handleAuthentication = (nextState, replace) => {
+  console.log("ATeina ")
   if (/access_token|id_token|error/.test(nextState.location.hash)) {
     auth.handleAuthentication();
   }
