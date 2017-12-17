@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 class Logout extends Component {
     render() {
         return (
-            <div>
+            <div className="container">
                 <h1> Logout </h1>
             </div>
         )

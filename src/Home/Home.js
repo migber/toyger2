@@ -7,7 +7,7 @@ class Home extends Component {
   render() {
     const { isAuthenticated } = this.props.auth;
     return (
-      <div className="container">    
+      <div className="container">
         {
           isAuthenticated() && (
               <h4>
