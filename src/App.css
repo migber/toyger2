@@ -19,7 +19,8 @@
 .App-title {
   /* font-size: 1.5em; */
   margin-right: 15%;
-  display:inline-block;
+  display: inline-block;
+  margin: auto;
 }
 
 /* .App-intro {
