@@ -1,102 +1,79 @@
 import React, { Component } from 'react'
 import api from './api'
 import '../App.css'
-
+import NewForm from './newForm'
 
 class Races extends Component {
    constructor(props){
        super(props);
        this.state = {
-           rovers: [],
-           roverName: ''
+           events: [],
+           eventName: '',
+           modalOpen: false,
+           token: '',
+           profile: '',
        }
    }
 
    componentWillMount(){
-    api.getRovers().then((res) => {
+    const { userProfile, getProfile, token } = this.props.auth;
+    if (!userProfile) {
+      getProfile((err, profile) => {
+        this.setState({ profile , token: token});
+      });
+    } else {
+      this.setState({ profile: userProfile,  token: token});
+    }
+    api.getRovers(token, "events").then((res) => {
         this.setState({
-            rovers: res.rovers,
-            roverName: res.rovers[0].name
+            events: res,
+            eventName: res[0].name
         })
     })
    }
-
-    render() {
-        console.log("Rovers: ", this.state.rovers)
+  
+    render()
+     {
+        const {modalOpen, profile} = this.state        
         return (
             <div className="container">
-            <table class="table table-hover">
+             <h1> Races </h1>
+            <table className="table table-hover">
             <thead>
               <tr>
-                <th scope="col">Type</th>
-                <th scope="col">Column heading</th>
-                <th scope="col">Column heading</th>
-                <th scope="col">Column heading</th>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Location</th>
+                <th scope="col">Participants</th>
+                <th scope="col">Stages</th>  
+                <th scope="col">Total KM</th>                           
               </tr>
-            </thead>
-            <tbody>
-              <tr class="table-active">
-                <th scope="row">Active</th>
-                <td>{this.state.roverName}</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr>
-                <th scope="row">Default</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr class="table-primary">
-                <th scope="row">Primary</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr class="table-secondary">
-                <th scope="row">Secondary</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr class="table-success">
-                <th scope="row">Success</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr class="table-danger">
-                <th scope="row">Danger</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr class="table-warning">
-                <th scope="row">Warning</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr class="table-info">
-                <th scope="row">Info</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr class="table-light">
-                <th scope="row">Light</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-              <tr class="table-dark">
-                <th scope="row">Dark</th>
-                <td>Column content</td>
-                <td>Column content</td>
-                <td>Column content</td>
-              </tr>
-            </tbody>
+              </thead>
+              {this.state.events.map(function (c, ind) {
+                  return   <tbody>
+                      <tr className="table-primary"> 
+                      <th scope="col">{ind+1}</th>
+                       <td> {c.name}</td>
+                       <td> {c.date}</td> 
+                       <td> {c.location}</td>   
+                       <td> {c.no_participants} </td> 
+                      <td> {c.no_stages}</td>
+                      <td> {c.total_km}</td>
+                      { profile.nickname === "migle.brs" && (
+                          <button type="button" className="btn btn-primary">Edit</button>
+                    )}
+                       { profile.nickname === "migle.brs" && (
+                            <button type="button" className="btn btn-danger">Delete</button> 
+                       )}
+                  </tr>
+                  </tbody>
+              })}
           </table> 
+          { profile.nickname === "migle.brs" && (
+          <button type="button" onClick={() => this.setState({modalOpen: true})} className="btn btn-success btn-lg">Add Race</button>
+          )}
+          { modalOpen && <NewForm auth={this.props.auth}/> }
               </div>
         )
     }

@@ -4,19 +4,19 @@ import './Profile.css';
 
 class Profile extends Component {
   componentWillMount() {
-    this.setState({ profile: {} });
-    const { userProfile, getProfile } = this.props.auth;
+    this.setState({ profile: {}, token: null });
+    const { userProfile, getProfile, getToken } = this.props.auth;
     if (!userProfile) {
       getProfile((err, profile) => {
-        this.setState({ profile });
+        this.setState({ profile , token: getToken()});
       });
     } else {
-      this.setState({ profile: userProfile });
+      this.setState({ profile: userProfile,  token: getToken()});
     }
   }
   render() {
-    const { profile } = this.state
-    console.log(profile)        
+    const { profile , token} = this.state
+    console.log("TOKEN  "+ token)
     return (
       <div className="container">
         <div className="profile-area">

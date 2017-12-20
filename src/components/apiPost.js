@@ -1,12 +1,12 @@
 
 
 var api = {
-    getRovers(token, name){
+    postData(token, name, data){
         var myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
         myHeaders.append('Accept', 'application/json');
         myHeaders.append('Authorization', `Bearer ${token}`)
-        var myInit = { method: 'GET',
+        var myInit = { method: 'POST',
                        headers: myHeaders,
                        mode: 'no-cors',
                        cache: 'default',
@@ -15,28 +15,15 @@ var api = {
         var url = `http://localhost:8025/api/${name}`
         var myRequest = new Request(url, myInit) 
         console.log("TOKKEEN  "+ token)
-        // return fetch(url).then(function(res) {
-        //     return res.json();
-        //    })
-        //   .then((quote) => {
-        //       console.log(quote)
-        //     // AlertIOS.alert(
-        //     //   "Chuck Norris Quote:", quote)
-        //   })
-        // return fetch(url, {
-        //     method: "GET",
-        //     headers: {
-        //       'Authorization': 'Bearer ' + token,
-        //       'Contetn-Type': 'application/json'
-        //     },
-        //     mode: 'no-cors',
-        //   }).then((res) => res.json());
-        // { method: "GET",
-        // headers: {
-        //   'Authorization': 'Bearer ' + token,
-        //   'Contetn-Type': 'application/json'
-        // }}
-        return fetch(url).then((res) => res.json());
+       
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
     }
 };
 

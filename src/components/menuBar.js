@@ -19,14 +19,14 @@ class MenuBar extends Component {
       <Navbar collapse navbar-collapse>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="/home">Toyger</a>
+          <a href="/tt">Toyger</a>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
         <Nav>
           <NavItem eventKey={1} href="/about">About</NavItem>
-          <NavItem eventKey={11} onClick={this.props.onAboutClick}>About with click{this.props.clickCount}</NavItem>
+          {/* <NavItem eventKey={11} onClick={this.props.onAboutClick}>About with click{this.props.clickCount}</NavItem> */}
           <NavItem eventKey={2} href="/contacts">Contacts</NavItem>
           <NavItem eventKey={3} href="/toyger/races">Races</NavItem>
           { eventId && 
@@ -45,7 +45,7 @@ class MenuBar extends Component {
           <NavItem eventKey={6} href="/toyger/teams">Teams</NavItem>
           {
           isAuthenticated() && (
-          <NavItem eventKey={1} href="./toyger/profile" >Profile</NavItem>
+          <NavItem eventKey={1} href="/toyger/profile"> Profile</NavItem>
         )}
         </Nav>
         <Nav pullRight>

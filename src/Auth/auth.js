@@ -12,7 +12,8 @@ export default class Auth {
     scope: 'openid profile'
   });
 
-  userProfile;
+  userProfile = ""
+  token = ""
 
   constructor() {
     this.login = this.login.bind(this);
@@ -21,6 +22,7 @@ export default class Auth {
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.getAccessToken = this.getAccessToken.bind(this);
     this.getProfile = this.getProfile.bind(this);
+    this.getToken = this.getToken.bind(this)
   }
 
   login() {
@@ -41,6 +43,7 @@ export default class Auth {
   }
 
   setSession(authResult) {
+    console.log(authResult)
     // Set the time that the access token will expire at
     let expiresAt = JSON.stringify(
       authResult.expiresIn * 1000 + new Date().getTime()
@@ -54,10 +57,19 @@ export default class Auth {
 
   getAccessToken() {
     const accessToken = localStorage.getItem('access_token');
+    this.token = localStorage.getItem('id_token')
     if (!accessToken) {
       throw new Error('No access token found');
     }
     return accessToken;
+  }
+
+  getToken() {
+    const token = localStorage.getItem('id_token');
+    if (!token) {
+      throw new Error('No access token found');
+    }
+    return token;
   }
 
   getProfile(cb) {
