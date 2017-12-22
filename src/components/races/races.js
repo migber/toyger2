@@ -1,18 +1,25 @@
 import React, { Component } from 'react'
-import api from './api'
-import '../App.css'
-import NewForm from './newForm'
+import api from '../api/api'
+import '../../App.css'
+import Modal from './modal'
+import ApiDelete from '../api/apiDelete'
+import EditModal from './editModal'
 
 class Races extends Component {
    constructor(props){
        super(props);
        this.state = {
            events: [],
-           eventName: '',
-           modalOpen: false,
            token: '',
            profile: '',
+           edit: false,
+           modalOpen: false,
        }
+
+       this.onSaveButtonClick = this.onSaveButtonClick.bind(this)
+       this.deleteEvent = this.deleteEvent.bind(this)
+       this.editStateOnChange = this.editStateOnChange.bind(this)
+       this.onCloseButtonClick = this.onCloseButtonClick.bind(this)
    }
 
    componentWillMount(){
@@ -27,14 +34,54 @@ class Races extends Component {
     api.getRovers(token, "events").then((res) => {
         this.setState({
             events: res,
-            eventName: res[0].name
         })
     })
    }
+
+   onSaveButtonClick(res){
+    console.log(res)
+    this.setState({
+        events: res,
+        modalOpen: false,
+        edit: false,
+    })
+    }
+
+    deleteEvent(id){
+    const { token } = this.props.auth;
+    console.log(id)
+    ApiDelete.delete(token, `events/${id}/delete`).then((res) => {
+        console.log(res)
+        this.setState({
+            events: res
+        })
+    })
+    }
+
+    editStateOnChange(){
+    this.setState({
+        edit: true
+    })
+    }
+
+    onCloseButtonClick(){
+    console.log("Close window")
+    this.setState({
+        events: this.state.events,
+        modalOpen: false,
+        edit: false,
+    })
+    }
+
   
     render()
      {
-        const {modalOpen, profile} = this.state        
+        const {modalOpen, edit, profile, commissaires} = this.state
+        const deleteEvent= this.deleteEvent
+        const editStateOnChange = this.editStateOnChange
+        const onSaveButtonClick = this.onSaveButtonClick
+        const onCloseButtonClick = this.onCloseButtonClick
+        const {auth} = this.props        
         return (
             <div className="container">
              <h1> Races </h1>
@@ -61,10 +108,12 @@ class Races extends Component {
                       <td> {c.no_stages}</td>
                       <td> {c.total_km}</td>
                       { profile.nickname === "migle.brs" && (
-                          <button type="button" className="btn btn-primary">Edit</button>
+                          <button onClick={editStateOnChange} type="button" className="btn btn-primary">Edit</button>
                     )}
+                    { edit &&  <EditModal auth={auth} edit={edit} ind={c.id} onSaveButtonClick={onSaveButtonClick} onCloseButtonClick={onCloseButtonClick}/>}
+
                        { profile.nickname === "migle.brs" && (
-                            <button type="button" className="btn btn-danger">Delete</button> 
+                            <button onClick={() => deleteEvent(c.id)} type="button" className="btn btn-danger">Delete</button> 
                        )}
                   </tr>
                   </tbody>
@@ -73,7 +122,8 @@ class Races extends Component {
           { profile.nickname === "migle.brs" && (
           <button type="button" onClick={() => this.setState({modalOpen: true})} className="btn btn-success btn-lg">Add Race</button>
           )}
-          { modalOpen && <NewForm auth={this.props.auth}/> }
+          { modalOpen && <Modal auth={this.props.auth} modalOpen={this.state.modalOpen} events={this.state.events}
+              onSaveButtonClick={this.onSaveButtonClick} onCloseButtonClick={this.onCloseButtonClick} edit={this.state.edit}/> }
               </div>
         )
     }

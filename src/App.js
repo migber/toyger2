@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Navbar, Button } from 'react-bootstrap'
 import './App.css'
 import MenuBar             from './components/menuBar'
-import newForm from './components/newForm'
 
 class App extends Component {
   constructor(props){

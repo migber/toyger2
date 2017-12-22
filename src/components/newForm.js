@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import api from './api'
-import '../App.css'
+import api from './api/api'
+import './../App.css'
 
 
 class NewForm extends Component {

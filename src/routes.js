@@ -7,12 +7,12 @@ import Auth from './Auth/Auth'
 import history from './history'
 import About from "./components/about"
 import Contacts from "./components/contacts"
-import Commissaires from "./components/commissaires"
-import Cyclists from "./components/cyclists"
-import Races from "./components/races"
+import Commissaires from "./components/commissaires/commissaires"
+import Cyclists from "./components/cyclists/cyclists"
+import Races from "./components/races/races"
 import Riders from "./components/riders"
 import Stages from "./components/stages"
-import Teams from "./components/teams"
+import Teams from "./components/teams/teams"
 import Results from "./components/results"
 import Sprints from "./components/sprints"
 import Profile from './components/Profile/Profile'

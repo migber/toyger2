@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import api from './api'
-import '../App.css'
+import api from '../api/api'
+import '../../App.css'
 import {
     FormGroup,
     ControlLabel,
@@ -8,23 +8,24 @@ import {
     FormControl,
     Button
 } from "react-bootstrap"
-import apiPost from './apiPost'
+import apiPost from '../api/apiPost'
 
 class Forms extends Component {
     constructor(props){
         super(props);
         this.state = {
-            no: 0,
+            uci_id: 0,
             uciId: "",
             c_name: '',
             surname: "",
             uci_cat: "",
             nationality: "",
             date: null,
-            gender: ''
+            gender: '',
+            edit: false
         }
     this.getValidationState = this.getValidationState.bind(this)
-    this.getValidationRaceNr = this.getValidationRaceNr.bind(this)
+    this.getValidationUCIID = this.getValidationUCIID.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleChangeNo = this.handleChangeNo.bind(this)
     this.handleChangeName = this.handleChangeName.bind(this)
@@ -33,7 +34,40 @@ class Forms extends Component {
     this.handleChangeDate = this.handleChangeDate.bind(this)
     this.saveData = this.saveData.bind(this)
     this.handleChangeUCICat = this.handleChangeUCICat.bind(this)
+    this.handleChangeNationality = this.handleChangeNationality.bind(this)
     }
+
+    componentWillMount(){
+        console.log(this.props.auth)
+        const { userProfile, getProfile, token } = this.props.auth;
+        if (!userProfile) {
+          getProfile((err, profile) => {
+            this.setState({ profile , token: token});
+          });
+        } else {
+          this.setState({ profile: userProfile,  token: token});
+        }
+        console.log(this.props.data)
+        const ind = this.props.ind
+        console.log(ind)
+        console.log(this.props.key)
+        if(this.props.edit){
+            api.getRovers(token, `cyclists/${ind}`).then((res) => {
+                console.log("STATIC")
+                console.log(res)
+                console.log("STATIC3")
+                this.setState({
+                    uci_id: res.uci_id,
+                    c_name: res.name,
+                    surname: res.surname,
+                    uci_cat: res.uci_category,
+                    nationality: res.nationality,
+                    date: res.birth_date,
+                    gender: res.gender
+                })
+            })
+        }
+       }
 
     getValidationState() {
         const length = this.state.value.length;
@@ -43,50 +77,57 @@ class Forms extends Component {
         return null;
     }
 
-    getValidationRaceNr(){
-        const num = this.state.no;
-        console.log(num)
-        if (num > 0){
+    getValidationUCIID(){
+        const num = this.state.uci_id;
+        // console.log(num)
+        if (num.length === 11){
             return 'success';
         } else return 'error';
         return null;
     }
     
     handleChange(e) {
-        this.setState({ name: e.target.name });
+        this.setState({ name: e.target.value });
     }
 
     handleChangeNo(e){
-        this.setState({no: e.target.no});
+        this.setState({uci_id: e.target.value});
     }
 
     handleChangeGender(e){
-        this.setState({gender: e.target.gender});
+        this.setState({gender: e.target.value});
     }
     
     handleChangeDate(e){
-        this.setState({date: e.target.date});
+        this.setState({date: e.target.value});
     }
 
     handleChangeName(e){
-        this.setState({c_name: e.target.c_name});
+        this.setState({c_name: e.target.value});
     }
 
     handleChangeSurname(e){
-        this.setState({surname: e.target.surname});
+        this.setState({surname: e.target.value});
     }
-
+x
     handleChangeUCICat(e){
         this.setState({
-            uci_cat: e.target.uci_cat
+            uci_cat: e.target.value
+        })
+    }
+
+    handleChangeNationality(e){
+        this.setState({
+            nationality: e.target.value
         })
     }
 
     saveData(){
+        console.log(this.state)
         const { token } = this.props.auth;
-        const {uciId, c_name, surname, uci_cat, nationality, date, gender} = this.state
+        const {uci_id, c_name, surname, uci_cat, nationality, date, gender} = this.state
         const data = {
-            uci_id: uciId,
+            uci_id: uci_id,
             name: c_name,
             surname: surname,
             birth_date: date,
@@ -94,35 +135,31 @@ class Forms extends Component {
             uci_category: uci_cat,
             nationality: nationality
         }
-        console.log(data)
-        apiPost.postData(token, 'cyclists', data).then((res) =>{
-            console.log(res)
-        })
-        this.props.action
+        console.log(this.props.edit)  
+        if(this.props.edit){
+            apiPost.postData(token, `cyclists/${data.uci_id}/update`, data).then((res) =>{
+                console.log(res)
+                api.getRovers(token, "cyclists").then((res) => {
+                    this.props.action(res)
+                })
+            })
+        } else {
+            apiPost.postData(token, 'cyclists', data).then((res) =>{
+                console.log(res)
+                api.getRovers(token, "cyclists").then((res) => {
+                    this.props.action(res)
+                })
+            })
+        }
     }
     
     render() {
         return (
             <form>
 
-            {/* <FormGroup
-            controlId="fromBasicNumber"
-            // validationState={this.getValidationRaceNr()}
-            >
-            <ControlLabel>No</ControlLabel>
-            <FormControl
-            type="number"
-            value={this.state.no}
-            placeholder="Enter number"
-            onChange={this.handleChangeNo}
-            />
-            <HelpBlock>Validation is based on number from 1 to 200.</HelpBlock>
-            <FormControl.Feedback />
-            </FormGroup> */}
-
             <FormGroup
             controlId="basicUciID"
-            // validationState={this.getValidationRaceNr()}
+            validationState={this.getValidationUCIID()}
             >
             <ControlLabel>UCI ID</ControlLabel>
             <FormControl
@@ -188,15 +225,26 @@ class Forms extends Component {
             <FormControl.Feedback />
             </FormGroup>
 
+            <FormGroup>
+            <ControlLabel>Nationality</ControlLabel>
+            <FormControl
+            type="text"
+            value={this.state.nationality}
+            placeholder="Enter text"
+            onChange={this.handleChangeNationality}
+            />
+            <FormControl.Feedback />
+            </FormGroup>
+
             <FormGroup controlId="formControlsSelect">
             <ControlLabel>Gender</ControlLabel>
             <FormControl componentClass="select" placeholder="select">
-                 <option value="female">Female</option>
-                 <option value="male">Male</option>
+                 <option value="female" onChange={this.handleChangeGender}>Female</option>
+                 <option value="male" onChange={this.handleChangeGender}>Male</option>
             </FormControl>
             </FormGroup>
-            <Button onClick={this.props.action}>Close</Button>
-            <Button onClick={() => this.saveData()} bsStyle="primary">Save changes</Button>
+            <Button onClick={this.props.onCloseButtonClick}>Close</Button>
+            <Button onClick={this.saveData} bsStyle="primary">Save changes</Button>
             </form>
         );
     }

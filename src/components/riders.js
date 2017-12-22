@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import api from './api'
+import api from './api/api'
 import '../App.css'
 
 class Riders extends Component {

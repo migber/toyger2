@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import api from './api'
-import '../App.css'
+import api from '../api/api'
+import '../../App.css'
 import {
    Modal,
    Button
   } from "react-bootstrap"
-import Forms from './FieldGroup'
+import Forms from './fieldGroup'
 
 class ModalWindow extends Component {
   constructor(props){
@@ -14,23 +14,28 @@ class ModalWindow extends Component {
       show: false
     }
     
-    this.handler = this.handler.bind(this)
+    this.onSaveButtonClick = this.onSaveButtonClick.bind(this)
+    this.onCloseButtonClick = this.onCloseButtonClick.bind(this)
 }
 
 
-handler(){
-  this.props.handler()
+onSaveButtonClick(){
+  this.props.onSaveButtonClick()
+}
+
+onCloseButtonClick(){
+  this.props.onCloseButtonClick()
 }
     render() {
         return(
             <div className="static-modal">
             <Modal.Dialog>
               <Modal.Header>
-                <Modal.Title>New Cyclist</Modal.Title>
+                <Modal.Title>New Race</Modal.Title>
               </Modal.Header>
         
               <Modal.Body>
-                  <Forms auth={this.props.auth} action={this.handler}/>
+                  <Forms auth={this.props.auth} onCloseButtonClick={this.onCloseButtonClick} action={this.props.onSaveButtonClick}/>
               </Modal.Body>
         
               <Modal.Footer>
